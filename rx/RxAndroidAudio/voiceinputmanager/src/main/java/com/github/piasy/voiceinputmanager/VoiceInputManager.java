@@ -67,14 +67,23 @@ public final class VoiceInputManager {
         void onStopped();
 
         /**
+         * 结束回调
          * This method is called in worker thread, and should send audio file sync.
          */
         @WorkerThread
         void onSend(File audioFile, int duration);
 
+        /**
+         * progress显示回调
+         * @param level
+         */
         @WorkerThread
         void onAmplitudeChanged(int level);
 
+        /**
+         * 剩余时间显示
+         * @param second
+         */
         @WorkerThread
         void onExpireCountdown(int second);
     }
@@ -136,6 +145,7 @@ public final class VoiceInputManager {
     }
 
     private void startRecord() {
+        //先准备好文件
         mEventListener.onPreparing();
         mAudioFile = new File(mAudioFilesDir.getAbsolutePath() +
                 File.separator + System.currentTimeMillis() + ".file.m4a");
@@ -155,15 +165,15 @@ public final class VoiceInputManager {
 
         elapsed();
         if (state() == VoiceInputState.STATE_RECORDING) {
-            addSubscribe(RxAmplitude.from(mAudioRecorder)
+            addSubscribe(RxAmplitude.from(mAudioRecorder)//获取声音幅度
                     .subscribeOn(Schedulers.io())
                     .subscribe(new Action1<Integer>() {
                         @Override
                         public void call(Integer level) {
                             int progress = mAudioRecorder.progress();
-                            mEventListener.onAmplitudeChanged(level);
+                            mEventListener.onAmplitudeChanged(level);//幅度接口
 
-                            if (progress >= mMaxAudioLengthSeconds - 3) {
+                            if (progress >= mMaxAudioLengthSeconds - 3) {//大于最长时间则要停止
                                 mEventListener.onExpireCountdown(mMaxAudioLengthSeconds - progress);
                                 if (progress == mMaxAudioLengthSeconds) {
                                     timeout();

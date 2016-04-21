@@ -236,11 +236,13 @@ public class FileActivity extends RxAppCompatActivity
     public void onPrepared() {
         runOnUiThread(mShowIndicatorRunnable, SHOW_INDICATOR_DELAY_MILLIS);
 //        mFlIndicator.postDelayed(mShowIndicatorRunnable, SHOW_INDICATOR_DELAY_MILLIS);
+        //"叮"
         mRxAudioPlayer.play(getApplicationContext(), R.raw.audio_record_ready).toBlocking().value();
     }
 
     @Override
     public void onStopped() {
+        //"关闭音"
         mRxAudioPlayer.play(getApplicationContext(), R.raw.audio_record_end).toBlocking().value();
     }
 
@@ -276,7 +278,7 @@ public class FileActivity extends RxAppCompatActivity
             public void run() {
                 refreshAudioAmplitudeView(level);
             }
-        });
+        },50);
 //        mFlIndicator.post(new Runnable() {
 //            @Override
 //            public void run() {
