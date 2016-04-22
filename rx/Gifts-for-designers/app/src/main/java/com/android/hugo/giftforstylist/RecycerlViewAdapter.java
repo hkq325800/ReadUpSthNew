@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -29,8 +30,14 @@ public class RecycerlViewAdapter extends RecyclerView.Adapter<RecycerlViewAdapte
     }
 
     @Override
-    public void onBindViewHolder(mViewHolder holder, int position) {
+    public void onBindViewHolder(mViewHolder holder, final int position) {
         holder.imageView.setBackgroundColor(mixColer.get(position));
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, ""+mixColer.get(position), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

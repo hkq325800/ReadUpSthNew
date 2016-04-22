@@ -42,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Integer> colors = new ArrayList<>();
 
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //        requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
@@ -80,41 +81,56 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void focusOnHEX() {
+        //事件流的顺序根据链式编程的顺序来定
+        //对editText的textChange的操作 返回的是char
         RxTextView.textChanges(editTextHEX)
-                  .subscribeOn(AndroidSchedulers.mainThread())
-                  .debounce(300, TimeUnit.MICROSECONDS)
-                  .map(new Func1<CharSequence, String>() {
-                      @Override public String call(CharSequence charSequence) {
-                          return charSequence.toString();
-                      }
-                  })
-                  .observeOn(AndroidSchedulers.mainThread())
-                  .doOnNext(new Action1<String>() {
-                      @Override public void call(String s) {
-                          if (s.length() == 5) {
-                              setBackground("56abe4", 0);
-                              editTextRGB.setText("");
-                          }
-                          if (!colors.isEmpty()) {
-                              colors.clear();
-                              adapter.notifyDataSetChanged();
-                          }
-                      }
-                  })
-                  .filter(new Func1<String, Boolean>() {
-                      @Override public Boolean call(String s) {
-                          return s.length() > 5;
-                      }
-                  })
-//                  .observeOn(AndroidSchedulers.mainThread())
-                  .subscribe(new Action1<String>() {
-                      @Override public void call(String s) {
-
-                          setBackground(s, 0);
-                          //                        addColorAdapter(s);
-                          changeToRGB(s);
-                      }
-                  });
+                .subscribeOn(AndroidSchedulers.mainThread())
+                // ReactiveXWiki——Debounce:
+                // only emit an item from an Observable if a particular timespan has passed
+                // without it emitting another item
+                // 中文释义"防反跳"/"去抖动"
+                .debounce(300, TimeUnit.MICROSECONDS)
+                //map负责对数据流进行处理 返回处理后的值 传递给doOnNext
+                .map(new Func1<CharSequence, String>() {
+                    @Override
+                    public String call(CharSequence charSequence) {
+                        return charSequence.toString();
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        Log.d("hkq", "doOnNext" + s);
+                        if (s.length() == 5) {
+//                            setBackground("56abe4", 0);
+//                            editTextRGB.setText("");
+                        }
+                        if (!colors.isEmpty()) {
+                            colors.clear();
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                })
+                //filter负责对数据流进行过滤 返回boolean值
+                //为true时进行subscribe
+                .filter(new Func1<String, Boolean>() {
+                    @Override
+                    public Boolean call(String s) {
+                        Log.d("hkq", "filter" + (s.length() > 5));
+                        return s.length() > 5;
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String s) {
+                        Log.d("hkq", "subscribe" + s);
+                        setBackground(s, 0);
+                        addColorAdapter(s);
+                        changeToRGB(s);
+                    }
+                });
     }
 
     //    private void focusOnRGB() {
@@ -197,6 +213,10 @@ public class MainActivity extends AppCompatActivity {
                         subscriber.onNext(2);
                         subscriber.onNext(3);
                         subscriber.onNext(4);
+                        subscriber.onNext(5);
+                        subscriber.onNext(6);
+                        subscriber.onNext(7);
+                        subscriber.onNext(8);
                         subscriber.onCompleted();
                     }
                 });
@@ -205,9 +225,10 @@ public class MainActivity extends AppCompatActivity {
             int red;
             int green;
             int blue;
+            int mixColer;
 
-
-            @Override public void onStart() {
+            @Override
+            public void onStart() {
                 super.onStart();
                 red = Integer.parseInt(
                         String.valueOf(s.charAt(0)) + s.charAt(1), 16);
@@ -221,13 +242,15 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-            @Override public void onCompleted() {
+            @Override
+            public void onCompleted() {
                 adapter = new RecycerlViewAdapter(MainActivity.this, colors);
                 recyclerView.setAdapter(adapter);
             }
 
 
-            @Override public void onNext(Object o) {
+            @Override
+            public void onNext(Object o) {
                 Random random = new Random();
                 int mixRed = random.nextInt(256);
                 int mixGreen = random.nextInt(256);
@@ -236,12 +259,14 @@ public class MainActivity extends AppCompatActivity {
                 mixRed = (red + mixRed) / 2;
                 mixGreen = (green + mixGreen) / 2;
                 mixBlue = (blue + mixBlue) / 2;
-                int mixColer = Color.rgb(mixRed, mixGreen, mixBlue);
+                mixColer = Color.rgb(mixRed, mixGreen, mixBlue);
                 colors.add(mixColer);
+                Log.d("hkq", ""+mixColer);
             }
 
 
-            @Override public void onError(Throwable e) {
+            @Override
+            public void onError(Throwable e) {
 
             }
         };
@@ -264,8 +289,7 @@ public class MainActivity extends AppCompatActivity {
         if (mark == 0) {
             paramInteger = ValueAnimator.ofObject(new ArgbEvaluator(), i,
                     Color.parseColor("#" + color));
-        }
-        else {
+        } else {
             paramInteger = ValueAnimator.ofObject(new ArgbEvaluator(), i, mark);
         }
 
