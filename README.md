@@ -15,6 +15,7 @@
 - [RxAndroidAudio](https://github.com/Piasy/RxAndroidAudio)
 - [Gifts-for-designers](https://github.com/xcc3641/Gifts-for-designers)
 - [RxJavaSamples](https://github.com/THEONE10211024/RxJavaSamples)
+- [rxandroidexamples](https://github.com/klnusbaum/rxandroidexamples)
 
 7.utils
 - [AndroidUtils](https://github.com/D-clock/AndroidUtils)
