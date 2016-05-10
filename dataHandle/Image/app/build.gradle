@@ -2,15 +2,15 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 17
-    buildToolsVersion "24.0.0 rc2"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "com.myc"
         minSdkVersion 10
         targetSdkVersion 10
         compileOptions {
-            sourceCompatibility JavaVersion.VERSION_1_5
-            targetCompatibility JavaVersion.VERSION_1_5
+            sourceCompatibility JavaVersion.VERSION_1_6
+            targetCompatibility JavaVersion.VERSION_1_6
         }
     }
 
