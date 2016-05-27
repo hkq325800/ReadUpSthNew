@@ -21,6 +21,8 @@
 [JustWeTools](https://github.com/lfkdsk/JustWeTools)
 [Lazy](https://github.com/l123456789jy/Lazy)
 [xUtils3](https://github.com/wyouflf/xUtils3)
+[NonViewUtils](https://github.com/android-quick-dev/NonViewUtils)
+[PatternLock](https://github.com/DreaminginCodeZH/PatternLock)
 8. fragment
 [Fragmentation](https://github.com/YoKeyword/Fragmentation)
 9. dataHandle
