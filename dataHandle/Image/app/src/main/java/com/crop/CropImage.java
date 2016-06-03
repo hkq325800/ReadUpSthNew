@@ -29,32 +29,36 @@ import com.myc.R;
  */
 public class CropImage
 {
-	public boolean mWaitingToPick; // Whether we are wait the user to pick a face.
+    public boolean mWaitingToPick; // Whether we are wait the user to pick a face.
     public boolean mSaving; // Whether the "save" button is already clicked.
     public HighlightView mCrop;
-    
-	private Context mContext;
-	private Handler mHandler = new Handler();
-	private CropImageView mImageView;
-	private Bitmap mBitmap;
-	
-	public CropImage(Context context, CropImageView imageView)
-	{
-		mContext = context;
-		mImageView = imageView;
-		mImageView.setCropImage(this);
-	}
-	
-	/**
-	 * 图片裁剪
-	 */
-	public void crop(Bitmap bm)
-	{
-		mBitmap = bm;
-		startFaceDetection();
-	}
-	
-	private void startFaceDetection() {
+
+    private Context mContext;
+    private Handler mHandler = new Handler();
+    private CropImageView mImageView;
+    private Bitmap mBitmap;
+    boolean hasCrop = false;
+
+    public CropImage(Context context, CropImageView imageView)
+    {
+        mContext = context;
+        mImageView = imageView;
+        mImageView.setCropImage(this);
+    }
+
+    /**
+     * 图片裁剪
+     */
+    public void crop(Bitmap bm)
+    {
+        if(!hasCrop) {
+            hasCrop = true;
+            mBitmap = bm;
+            startFaceDetection();
+        }
+    }
+
+    private void startFaceDetection() {
         if (((Activity)mContext).isFinishing()) {
             return;
         }
@@ -86,32 +90,33 @@ public class CropImage
         }, mHandler);
     }
 
-	/**
-	 * 裁剪并保存
-	 * @return
-	 */
-	public Bitmap cropAndSave(Bitmap bm)
-	{
-		final Bitmap bmp = onSaveClicked(bm);
-		mImageView.mHighlightViews.clear();
-		return bmp;
-	}
-	
-	/**
-	 * 取消裁剪
-	 */
-	public void cropCancel()
-	{
-		mImageView.mHighlightViews.clear();
-		mImageView.invalidate();
-	}
-	
+    /**
+     * 裁剪并保存
+     * @return
+     */
+    public Bitmap cropAndSave(Bitmap bm)
+    {
+        final Bitmap bmp = onSaveClicked(bm);
+        mImageView.mHighlightViews.clear();
+        return bmp;
+    }
+
+    /**
+     * 取消裁剪
+     */
+    public void cropCancel()
+    {
+        mImageView.mHighlightViews.clear();
+        mImageView.invalidate();
+        hasCrop = false;
+    }
+
     private Bitmap onSaveClicked(Bitmap bm) {
         // CR: TODO!
         // TODO this code needs to change to use the decode/crop/encode single
         // step api so that we don't require that the whole (possibly large)
         // bitmap doesn't have to be read into memory
-        if (mSaving)  
+        if (mSaving)
             return bm;
 
         if (mCrop == null) {
@@ -138,32 +143,32 @@ public class CropImage
 
     public String saveToLocal(Bitmap bm)
     {
-    	String path = "/sdcard/mm.jpg";
-    	try
-		{
-			FileOutputStream fos = new FileOutputStream(path);
-			bm.compress(CompressFormat.JPEG, 75, fos);
-			fos.flush();
-			fos.close();
-		} catch (FileNotFoundException e)
-		{
-			e.printStackTrace();
-			return null;
-		} catch (IOException e)
-		{
-			e.printStackTrace();
-			return null;
-		}
-		
-		return path;
+        String path = "/sdcard/mm.jpg";
+        try
+        {
+            FileOutputStream fos = new FileOutputStream(path);
+            bm.compress(CompressFormat.JPEG, 75, fos);
+            fos.flush();
+            fos.close();
+        } catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+
+        return path;
     }
 
     private void showProgressDialog(String msg, Runnable job, Handler handler)
     {
-    	final ProgressDialog progress = ProgressDialog.show(mContext, null, msg);
-    	new Thread(new BackgroundJob(progress, job, handler)).start();
+        final ProgressDialog progress = ProgressDialog.show(mContext, null, msg);
+        new Thread(new BackgroundJob(progress, job, handler)).start();
     }
-    
+
     Runnable mRunFaceDetection = new Runnable() {
         float mScale = 1F;
         Matrix mImageMatrix;
@@ -243,7 +248,7 @@ public class CropImage
             // 256 pixels wide is enough.
             if (mBitmap.getWidth() > 256) {
                 mScale = 256.0F / mBitmap.getWidth(); // CR: F => f (or change
-                                                      // all f to F).
+                // all f to F).
             }
             Matrix matrix = new Matrix();
             matrix.setScale(mScale, mScale);
@@ -291,39 +296,39 @@ public class CropImage
             });
         }
     };
-	
-	class BackgroundJob implements Runnable
+
+    class BackgroundJob implements Runnable
     {
-    	private ProgressDialog mProgress;
-    	private Runnable mJob;
-    	private Handler mHandler;
-    	public BackgroundJob(ProgressDialog progress, Runnable job, Handler handler)
-    	{
-    		mProgress = progress;
-    		mJob = job;
-    		mHandler = handler;
-    	}
-    	
-    	public void run()
-    	{
-    		try 
-    		{
-    			mJob.run();
-    		}
-    		finally
-    		{
-    			mHandler.post(new Runnable()
-    			{
-    				public void run()
-    				{
-    					if (mProgress != null && mProgress.isShowing())
-    					{
-    						mProgress.dismiss();
-    						mProgress = null;
-    					}
-    				}
-    			});
-    		}
-    	}
+        private ProgressDialog mProgress;
+        private Runnable mJob;
+        private Handler mHandler;
+        public BackgroundJob(ProgressDialog progress, Runnable job, Handler handler)
+        {
+            mProgress = progress;
+            mJob = job;
+            mHandler = handler;
+        }
+
+        public void run()
+        {
+            try
+            {
+                mJob.run();
+            }
+            finally
+            {
+                mHandler.post(new Runnable()
+                {
+                    public void run()
+                    {
+                        if (mProgress != null && mProgress.isShowing())
+                        {
+                            mProgress.dismiss();
+                            mProgress = null;
+                        }
+                    }
+                });
+            }
+        }
     }
 }

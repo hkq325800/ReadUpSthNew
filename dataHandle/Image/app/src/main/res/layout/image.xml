@@ -2,20 +2,96 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/image" />
+        android:src="@drawable/image"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="wrap_content"
-        android:layout_below="@+id/imageView1"
+        android:layout_height="200dp"
+        android:layout_below="@+id/imageView1" />
+    <Button
+        android:id="@+id/mSaveBtn"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/imageView2"
+        android:layout_toRightOf="@id/imageView2"
+        android:layout_marginLeft="15dp"
+        android:text="保存图片"/>
+
+    <RelativeLayout
+        android:id="@+id/mTextReL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageView2"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/mTextContentEdt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="textContent"
+            android:text="text" />
+
+        <EditText
+            android:id="@+id/mTextSizeEdt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mTextContentEdt"
+            android:layout_marginTop="10dp"
+            android:hint="textSize"
+            android:inputType="number"
+            android:text="75" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/mTextPositionReL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/mTextReL"
+        android:layout_below="@id/imageView2"
+        android:layout_marginLeft="20dp"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/mTextXEdt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="textPositionX"
+            android:text="" />
+
+        <EditText
+            android:id="@+id/mTextYEdt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mTextXEdt"
+            android:layout_marginTop="10dp"
+            android:hint="textPositionY"
+            android:inputType="number"
+            android:text="" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/mSignReL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@id/imageView2"
+        android:layout_below="@id/mSaveBtn"
         android:layout_marginTop="10dp"
-        android:src="@drawable/image" />
+        android:visibility="gone">
+        <Button
+            android:id="@+id/mSignBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选择标识"/>
+    </RelativeLayout>
 
 </RelativeLayout>

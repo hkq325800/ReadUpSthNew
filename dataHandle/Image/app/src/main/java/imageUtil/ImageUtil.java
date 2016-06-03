@@ -91,7 +91,7 @@ public class ImageUtil {
 		if (!file.exists())
 			file.mkdirs();
 		try {
-			path = file.getPath() + "/" + name;
+			path = file.getPath() + "/" + name+".jpg";
 			FileOutputStream fileOutputStream = new FileOutputStream(path);
 
 			bmp.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
@@ -195,6 +195,23 @@ public class ImageUtil {
 	}
 
 	/**
+	 * 读取资源图片
+	 *
+	 * @param context
+	 * @param is
+	 * @return
+	 */
+	public static Bitmap readBitMap(Context context, InputStream is) {
+		BitmapFactory.Options opt = new BitmapFactory.Options();
+		opt.inPreferredConfig = Bitmap.Config.RGB_565;
+		opt.inPurgeable = true;
+		opt.inInputShareable = true;
+		// 获取资源图片
+//		InputStream is = context.getResources().openRawResource(resId);
+		return BitmapFactory.decodeStream(is, null, opt);
+	}
+
+	/**
 	 * 从sd卡读取图片
 	 * 
 	 * @param path
@@ -260,8 +277,8 @@ public class ImageUtil {
 		Bitmap newb = Bitmap.createBitmap(src.getWidth(), src.getHeight(), Config.ARGB_8888);// 创建一个新的和SRC长度宽度一样的位图
 		Canvas canvas = new Canvas(newb);
 		canvas.drawBitmap(src, 0, 0, null);// 在 0，0坐标开始画入原图片src
-		canvas.drawBitmap(watermark, (src.getWidth() - watermark.getWidth()) / 2,
-				(src.getHeight() - watermark.getHeight()) / 2, null); // 涂鸦图片画到原图片中间位置
+		canvas.drawBitmap(watermark, x /*(src.getWidth() - watermark.getWidth()) / 2*/,
+				y /*(src.getHeight() - watermark.getHeight()) / 2*/, null); // 涂鸦图片画到原图片中间位置
 		canvas.save(Canvas.ALL_SAVE_FLAG);
 		canvas.restore();
 		watermark.recycle();
@@ -272,21 +289,23 @@ public class ImageUtil {
 	/**
 	 * 图片上写文字
 	 * 
-	 * @param src源图片
-	 * @param msg文字
+	 * @param src 源图片
+	 * @param msg 文字
 	 * @param x
 	 * @param y
+	 * @param textSize 240
+	 * @param textColor Color.RED
 	 * @return
 	 */
-	 public static Bitmap drawText(Bitmap src, String msg, int x, int y) {
+	 public static Bitmap drawText(Bitmap src, String msg, int x, int y, int textSize, int textColor) {
          // 另外创建一张图片
          Bitmap newb = Bitmap.createBitmap(src.getWidth(), src.getHeight(), Config.ARGB_8888);// 创建一个新的和SRC长度宽度一样的位图
          Canvas canvas = new Canvas(newb);
          Paint paint = new Paint();
-         paint.setTextSize(240);
-         paint.setColor(Color.RED);
+         paint.setTextSize(textSize);
+         paint.setColor(textColor);
          canvas.drawBitmap(src, 0, 0, null);// 在 0，0坐标开始画入原图片src
-         canvas.drawText(msg, x, y, paint);
+         canvas.drawText(msg, x, y, paint);//y为文字底部 x为文字左侧
          canvas.save(Canvas.ALL_SAVE_FLAG);
          canvas.restore();
          return newb;

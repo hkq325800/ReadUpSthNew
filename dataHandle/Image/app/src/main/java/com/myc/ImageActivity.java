@@ -14,13 +14,13 @@ public class ImageActivity extends Activity {
 	ListView mListView;
 	//涂鸦，水印6 图片上写文字7 图片裁剪15
 	private String[] mListStr = {
-			"人脸美化",
+//			"人脸美化",
 //			"图片缩放",
 //			"图片圆角",
 //			"图片倒影",
 //			"旋转图片",
 //			"图片反转",
-//			"图片色调饱和度、色相、亮度处理",
+			"饱和度 色相 亮度处理",
 			"图片标识",
 			"图片嵌字",
 //			"怀旧效果",
@@ -50,7 +50,7 @@ public class ImageActivity extends Activity {
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 
 			public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-				if (position == 5) {//图片色调饱和度、色相、亮度处理
+				if (position == 0) {//图片色调饱和度、色相、亮度处理 5
 					Intent intent = new Intent(ImageActivity.this, ImageToneActivity.class);
 					startActivity(intent);
 					return;

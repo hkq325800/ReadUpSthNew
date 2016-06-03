@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.crop.CropImage;
 import com.crop.view.CropImageView;
@@ -86,6 +87,7 @@ public class ImageCrop extends Activity {
 				intent.putExtra("path", path);
 				setResult(RESULT_OK, intent);
 				finish();
+				Toast.makeText(ImageCrop.this, "保存到了"+path, Toast.LENGTH_LONG).show();
 			}
 		});
 		builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
