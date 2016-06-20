@@ -22,10 +22,6 @@
 [Lazy](https://github.com/l123456789jy/Lazy)
 [xUtils3](https://github.com/wyouflf/xUtils3)
 [NonViewUtils](https://github.com/android-quick-dev/NonViewUtils)
-[PatternLock](https://github.com/hkq325800/PatternLock)
-[Android-SnappingStepper](https://github.com/hkq325800/Android-SnappingStepper)
-[Android-SVProgressHUD](https://github.com/hkq325800/Android-SVProgressHUD)
-[RichText](https://github.com/zzhoujay/RichText)
 8. fragment
 [Fragmentation](https://github.com/YoKeyword/Fragmentation)
 9. dataHandle
@@ -34,3 +30,8 @@ image
 [FlyRefresh](https://github.com/hkq325800/FlyRefresh)
 [CleverRecyclerView](https://github.com/hkq325800/CleverRecyclerView)
 [Taurus](https://github.com/hkq325800/Taurus)
+11. views
+[PatternLock](https://github.com/hkq325800/PatternLock)
+[Android-SnappingStepper](https://github.com/hkq325800/Android-SnappingStepper)
+[Android-SVProgressHUD](https://github.com/hkq325800/Android-SVProgressHUD)
+[RichText](https://github.com/zzhoujay/RichText)
